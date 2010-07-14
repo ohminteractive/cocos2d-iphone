@@ -163,7 +163,12 @@
 	float h = winSize.height / 2;
 
 	ccDeviceOrientation orientation  = [director deviceOrientation];
+	BOOL disableInternalRotation = [director disableInternalRotation];
 
+	if (disableInternalRotation || orientation == CCDeviceOrientationPortrait) {
+		return;
+	}
+	
 	switch (orientation) {
 		case CCDeviceOrientationLandscapeLeft:
 			glTranslatef(w,h,0);

@@ -248,6 +248,10 @@ and when to execute the Scenes.
 	
 	/* contentScaleFactor could be simulated */
 	BOOL	isContentScaleSupported_;
+	
+	/* disable cocos2d support for rotation. Use this if you put the EAGLView
+	 * in a UIViewController and you want the ViewController to handle rotation */
+	BOOL	disableInternalRotation_;
 
 #if CC_ENABLE_PROFILERS
 	ccTime accumDtForProfiler_;
@@ -291,6 +295,8 @@ and when to execute the Scenes.
  @since v0.99.4
  */
 @property (nonatomic, readwrite) CGFloat contentScaleFactor;
+
+@property (nonatomic, readwrite) BOOL disableInternalRotation;
 
 /** returns a shared instance of the director */
 +(CCDirector *)sharedDirector;

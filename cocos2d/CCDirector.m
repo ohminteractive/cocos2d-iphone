@@ -89,6 +89,7 @@ extern NSString * cocos2dVersion(void);
 @synthesize deviceOrientation=deviceOrientation_;
 @synthesize isPaused=isPaused_;
 @synthesize sendCleanupToScene=sendCleanupToScene_;
+@synthesize disableInternalRotation=disableInternalRotation_;
 
 //
 // singleton stuff
@@ -169,6 +170,7 @@ static CCDirector *_sharedDirector = nil;
 		
 		// landscape
 		deviceOrientation_ = CCDeviceOrientationPortrait;
+		disableInternalRotation_ = NO;
 
 		// FPS
 		displayFPS_ = NO;
@@ -597,22 +599,26 @@ static CCDirector *_sharedDirector = nil;
 	float newX = s.width - uiPoint.x;
 	
 	CGPoint ret = CGPointZero;
-	switch ( deviceOrientation_) {
-		case CCDeviceOrientationPortrait:
-			 ret = ccp( uiPoint.x, newY );
-			break;
-		case CCDeviceOrientationPortraitUpsideDown:
-			ret = ccp(newX, uiPoint.y);
-			break;
-		case CCDeviceOrientationLandscapeLeft:
-			ret.x = uiPoint.y;
-			ret.y = uiPoint.x;
-			break;
-		case CCDeviceOrientationLandscapeRight:
-			ret.x = newY;
-			ret.y = newX;
-			break;
-		}
+	
+	if (disableInternalRotation_ || deviceOrientation_ == CCDeviceOrientationPortrait) {
+		ret = ccp (uiPoint.x, newY);
+	} else {
+		switch ( deviceOrientation_) {
+			case CCDeviceOrientationPortrait:
+				break;
+			case CCDeviceOrientationPortraitUpsideDown:
+				ret = ccp(newX, uiPoint.y);
+				break;
+			case CCDeviceOrientationLandscapeLeft:
+				ret.x = uiPoint.y;
+				ret.y = uiPoint.x;
+				break;
+			case CCDeviceOrientationLandscapeRight:
+				ret.x = newY;
+				ret.y = newX;
+				break;
+			}
+	}
 
 	if( contentScaleFactor_ != 1 && isContentScaleSupported_ )
 		ret = ccpMult(ret, contentScaleFactor_);
@@ -625,22 +631,26 @@ static CCDirector *_sharedDirector = nil;
 	int oppositeX = winSize.width - glPoint.x;
 	int oppositeY = winSize.height - glPoint.y;
 	CGPoint uiPoint = CGPointZero;
-	switch ( deviceOrientation_) {
-		case CCDeviceOrientationPortrait:
-			uiPoint = ccp(glPoint.x, oppositeY);
-			break;
-		case CCDeviceOrientationPortraitUpsideDown:
-			uiPoint = ccp(oppositeX, glPoint.y);
-			break;
-		case CCDeviceOrientationLandscapeLeft:
-			uiPoint = ccp(glPoint.y, glPoint.x);
-			break;
-		case CCDeviceOrientationLandscapeRight:
-			// Can't use oppositeX/Y because x/y are flipped
-			uiPoint = ccp(winSize.width-glPoint.y, winSize.height-glPoint.x);
-			break;
-	}
 	
+	if (disableInternalRotation_ || deviceOrientation_ == CCDeviceOrientationPortrait) {
+		uiPoint = ccp(glPoint.x, oppositeY);
+	} else {
+		switch ( deviceOrientation_) {
+			case CCDeviceOrientationPortrait:
+				break;
+			case CCDeviceOrientationPortraitUpsideDown:
+				uiPoint = ccp(oppositeX, glPoint.y);
+				break;
+			case CCDeviceOrientationLandscapeLeft:
+				uiPoint = ccp(glPoint.y, glPoint.x);
+				break;
+			case CCDeviceOrientationLandscapeRight:
+				// Can't use oppositeX/Y because x/y are flipped
+				uiPoint = ccp(winSize.width-glPoint.y, winSize.height-glPoint.x);
+				break;
+		}
+	}
+		
 	uiPoint = ccpMult(uiPoint, 1/contentScaleFactor_);
 	return uiPoint;
 }
@@ -650,7 +660,8 @@ static CCDirector *_sharedDirector = nil;
 {
 	CGSize s = surfaceSize_;
 	
-	if( deviceOrientation_ == CCDeviceOrientationLandscapeLeft || deviceOrientation_ == CCDeviceOrientationLandscapeRight ) {
+	if( !disableInternalRotation_ && 
+	   ( deviceOrientation_ == CCDeviceOrientationLandscapeLeft || deviceOrientation_ == CCDeviceOrientationLandscapeRight )) {
 		// swap x,y in landscape mode
 		CGSize tmp = s;
 		s.width = tmp.height;
@@ -697,27 +708,31 @@ static CCDirector *_sharedDirector = nil;
 
 	// XXX it's using hardcoded values.
 	// What if the the screen size changes in the future?
-	switch ( deviceOrientation_ ) {
-		case CCDeviceOrientationPortrait:
-			// nothing
-			break;
-		case CCDeviceOrientationPortraitUpsideDown:
-			// upside down
-			glTranslatef(w,h,0);
-			glRotatef(180,0,0,1);
-			glTranslatef(-w,-h,0);
-			break;
-		case CCDeviceOrientationLandscapeRight:
-			glTranslatef(w,h,0);
-			glRotatef(90,0,0,1);
-			glTranslatef(-h,-w,0);
-			break;
-		case CCDeviceOrientationLandscapeLeft:
-			glTranslatef(w,h,0);
-			glRotatef(-90,0,0,1);
-			glTranslatef(-h,-w,0);
-			break;
-	}	
+	if (disableInternalRotation_ || deviceOrientation_ == CCDeviceOrientationPortrait) {
+		return;
+	} else {
+		switch ( deviceOrientation_ ) {
+			case CCDeviceOrientationPortrait:
+				// nothing
+				break;
+			case CCDeviceOrientationPortraitUpsideDown:
+				// upside down
+				glTranslatef(w,h,0);
+				glRotatef(180,0,0,1);
+				glTranslatef(-w,-h,0);
+				break;
+			case CCDeviceOrientationLandscapeRight:
+				glTranslatef(w,h,0);
+				glRotatef(90,0,0,1);
+				glTranslatef(-h,-w,0);
+				break;
+			case CCDeviceOrientationLandscapeLeft:
+				glTranslatef(w,h,0);
+				glRotatef(-90,0,0,1);
+				glTranslatef(-h,-w,0);
+				break;
+		}
+	}
 }
 
 #pragma mark Director Scene Management
