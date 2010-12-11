@@ -39,7 +39,7 @@ enum {
 		CGSize s = [[CCDirector sharedDirector] winSize];
 
 		CCSprite *grossini = [CCSprite spriteWithFile:@"grossini.png"];
-		CCLabel *label = [CCLabel labelWithString:[NSString stringWithFormat:@"%dx%d",(int)s.width, (int)s.height] fontName:@"Marker Felt" fontSize:28];
+		CCLabelTTF *label = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"%dx%d",(int)s.width, (int)s.height] fontName:@"Marker Felt" fontSize:28];
 		
 		[self addChild:label];
 		[self addChild:grossini z:0 tag:kTagSprite];
@@ -223,6 +223,10 @@ enum {
 	CCDirector *director = [CCDirector sharedDirector];
 	[director setDisplayFPS:YES];
 
+	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
+	
 	[window makeKeyAndVisible];
 	
 	state = kStateEnd;

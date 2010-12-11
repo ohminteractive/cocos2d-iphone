@@ -23,15 +23,15 @@
 	if( (self=[super init] ) )
 	{
 		CGSize s = [[CCDirector sharedDirector] winSize];
-		CCLabel *label;
+		CCLabelTTF *label;
 		
 #ifdef __IPHONE_3_2
 		if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-			label = [CCLabel labelWithString:@"Hello iPad" fontName:@"Marker Felt" fontSize:40];
+			label = [CCLabelTTF labelWithString:@"Hello iPad" fontName:@"Marker Felt" fontSize:40];
 
 		else
 #endif
-			label = [CCLabel labelWithString:@"Hello iPhone" fontName:@"Marker Felt" fontSize:40];
+			label = [CCLabelTTF labelWithString:@"Hello iPhone" fontName:@"Marker Felt" fontSize:40];
 
 		label.position = ccp(s.width/2, s.height/2);
 		[self addChild:label];
@@ -68,8 +68,9 @@
 
 	[director setOpenGLView:glView_];
 
-	// High res mode
-//	[director setContentScaleFactor:2];
+	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
 	
 	// turn on multiple touches
 	[glView_ setMultipleTouchEnabled:YES];
@@ -100,14 +101,20 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {	
-	[[CCDirector sharedDirector] end];
+	CCDirector *director = [CCDirector sharedDirector];
+	[[director openGLView] removeFromSuperview];
+	[director end];
+	
+	// release glView here, else it won't be dealloced
+	[glView_ release];
+	glView_ = nil;
 }
 
 #pragma mark -
 #pragma mark Init
 -(void) dealloc
 {
-	[glView_ release];
+//	[glView_ release];
 	[window_ release];
 	[super dealloc];
 }

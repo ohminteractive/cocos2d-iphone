@@ -21,18 +21,18 @@ enum {
 
 static int sceneIdx=-1;
 static NSString *transitions[] = {
+	@"Test2",
+	@"Test4",
+	@"Test5",
+	@"Test6",
+	@"StressTest1",
+	@"StressTest2",
+	@"NodeToWorld",
+	@"SchedulerTest1",
+	@"CameraOrbitTest",
+	@"CameraZoomTest",	
 	@"CameraCenterTest",
-			@"Test2",
-			@"Test4",
-			@"Test5",
-			@"Test6",
-			@"StressTest1",
-			@"StressTest2",
-			@"NodeToWorld",
-			@"SchedulerTest1",
-			@"CameraOrbitTest",
-			@"CameraZoomTest",	
-			@"CameraCenterTest",
+	@"ConvertToNode",
 };
 
 Class nextAction()
@@ -75,13 +75,13 @@ Class restartAction()
 
 		CGSize s = [[CCDirector sharedDirector] winSize];
 	
-		CCLabel* label = [CCLabel labelWithString:[self title] fontName:@"Arial" fontSize:32];
+		CCLabelTTF *label = [CCLabelTTF labelWithString:[self title] fontName:@"Arial" fontSize:32];
 		[self addChild: label];
 		[label setPosition: ccp(s.width/2, s.height-50)];
 		
 		NSString *subtitle = [self subtitle];
 		if( subtitle ) {
-			CCLabel* l = [CCLabel labelWithString:subtitle fontName:@"Thonburi" fontSize:16];
+			CCLabelTTF *l = [CCLabelTTF labelWithString:subtitle fontName:@"Thonburi" fontSize:16];
 			[self addChild:l z:1];
 			[l setPosition:ccp(s.width/2, s.height-80)];
 		}		
@@ -809,6 +809,87 @@ Class restartAction()
 @end
 
 
+
+#pragma mark -
+#pragma mark ConvertToNode
+
+@implementation ConvertToNode
+
+-(id) init
+{
+	if( ( self=[super init]) ) {
+		
+		self.isTouchEnabled = YES;
+
+		CGSize s = [[CCDirector sharedDirector] winSize];
+		
+		id rotate = [CCRotateBy actionWithDuration:10 angle:360];
+		id action = [CCRepeatForever actionWithAction:rotate];
+		for(int i=0;i<3;i++) {
+			CCSprite *sprite = [CCSprite spriteWithFile:@"grossini.png"];
+			sprite.position = ccp( s.width/4*(i+1), s.height/2);
+			
+			CCSprite *point = [CCSprite spriteWithFile:@"r1.png"];
+			point.scale = 0.25f;
+			point.position = sprite.position;
+			[self addChild:point z:10 tag:100+i];
+			
+			switch(i) {
+				case 0:
+					sprite.anchorPoint = CGPointZero;
+					break;
+				case 1:
+					sprite.anchorPoint = ccp(0.5f, 0.5f);
+					break;
+				case 2:
+					sprite.anchorPoint = ccp(1,1);
+					break;
+			}
+			
+			point.position = sprite.position;
+			
+			id copy = [[action copy] autorelease];
+			[sprite runAction:copy];
+			[self addChild:sprite z:i];
+		}		
+	}
+	
+	return self;
+}
+
+-(void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	for( UITouch *touch in touches ) {
+		CGPoint location = [touch locationInView: [touch view]];
+		
+		location = [[CCDirector sharedDirector] convertToGL: location];
+
+		for( int i=0; i<3; i++) {
+			CCNode *node = [self getChildByTag:100+i];
+			
+			CGPoint p1, p2;
+			
+			p1 = [node convertToNodeSpaceAR:location];
+			p2 = [node convertToNodeSpace:location];
+
+			NSLog(@"AR: x=%.2f, y=%.2f -- Not AR: x=%.2f, y=%.2f", p1.x, p1.y, p2.x, p2.y);
+		}
+	}	
+}
+
+-(NSString *) title
+{
+	return @"Convert To Node Space";
+}
+
+-(NSString*) subtitle
+{
+	return @"testing convertToNodeSpace / AR. Touch and see console";
+}
+@end
+
+
+
 #pragma mark -
 #pragma mark AppController
 
@@ -840,6 +921,10 @@ Class restartAction()
 	
 	// Turn on display FPS
 	[director setDisplayFPS:YES];
+	
+	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
 	
 	// Set multiple touches on
 	EAGLView *glView = [director openGLView];
@@ -878,10 +963,12 @@ Class restartAction()
 	[[CCDirector sharedDirector] startAnimation];
 }
 
+// application will be killed
 - (void)applicationWillTerminate:(UIApplication *)application
 {	
-	[[CCDirector sharedDirector] end];
+	CC_DIRECTOR_END();
 }
+
 
 // purge memory
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application

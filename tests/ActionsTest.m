@@ -14,32 +14,34 @@ enum {
 
 static int sceneIdx=-1;
 static NSString *transitions[] = {
-					@"ActionManual",
-					@"ActionMove",
-					@"ActionRotate",
-					@"ActionScale",
-					@"ActionJump",
-					@"ActionBezier",
-					@"ActionBlink",
-					@"ActionFade",
-					@"ActionTint",
-					@"ActionAnimate",
-					@"ActionSequence",
-					@"ActionSequence2",
-					@"ActionSpawn",
-					@"ActionReverse",
-					@"ActionDelayTime",
-					@"ActionRepeat",
-					@"ActionRepeatForever",
-					@"ActionRotateToRepeat",
-					@"ActionRotateJerk",
-					@"ActionCallFunc",
-					@"ActionCallFuncND",
-					@"ActionReverseSequence",
-					@"ActionReverseSequence2",
-					@"ActionOrbit",
-					@"ActionFollow",
-					@"ActionProperty",
+	
+	@"ActionManual",
+	@"ActionMove",
+	@"ActionRotate",
+	@"ActionScale",
+	@"ActionJump",
+	@"ActionBezier",
+	@"ActionBlink",
+	@"ActionFade",
+	@"ActionTint",
+	@"ActionAnimate",
+	@"ActionSequence",
+	@"ActionSequence2",
+	@"ActionSpawn",
+	@"ActionReverse",
+	@"ActionDelayTime",
+	@"ActionRepeat",
+	@"ActionRepeatForever",
+	@"ActionRotateToRepeat",
+	@"ActionRotateJerk",
+	@"ActionCallFunc",
+	@"ActionCallFuncND",
+	@"ActionCallBlock",
+	@"ActionReverseSequence",
+	@"ActionReverseSequence2",
+	@"ActionOrbit",
+	@"ActionFollow",
+	@"ActionProperty",
 };
 
 Class nextAction()
@@ -78,18 +80,9 @@ Class restartAction()
 {
 	if( (self=[super init])) {
 	
-		// Example:
-		// You can create a sprite using a Texture2D
-		CCTexture2D *tex = [ [CCTexture2D alloc] initWithImage: [UIImage imageWithContentsOfFile: [[CCConfiguration sharedConfiguration].loadingBundle pathForResource:@"grossini.png" ofType:nil] ] ];
-		grossini = [[CCSprite spriteWithTexture:tex] retain];
-		[tex release];
-
-		
-		// Example:
-		// Or you can create an sprite using a filename. PNG, JPEG and BMP files are supported. Probably TIFF too
-		tamara = [[CCSprite spriteWithFile:@"grossinis_sister1.png"] retain];
-		
-		kathia = [[CCSprite spriteWithFile:@"grossinis_sister2.png"] retain];
+		grossini = [[CCSprite alloc] initWithFile:@"grossini.png"];
+		tamara = [[CCSprite alloc] initWithFile:@"grossinis_sister1.png"];
+		kathia = [[CCSprite alloc] initWithFile:@"grossinis_sister2.png"];
 		
 		[self addChild:grossini z:1];
 		[self addChild:tamara z:2];
@@ -101,13 +94,13 @@ Class restartAction()
 		[tamara setPosition: ccp(s.width/2, 2*s.height/3)];
 		[kathia setPosition: ccp(s.width/2, s.height/2)];
 		
-		CCLabel* label = [CCLabel labelWithString:[self title] fontName:@"Arial" fontSize:32];
+		CCLabelTTF* label = [CCLabelTTF labelWithString:[self title] fontName:@"Arial" fontSize:32];
 		[self addChild: label];
 		[label setPosition: ccp(s.width/2, s.height-50)];
 		
 		NSString *subtitle = [self subtitle];
 		if( subtitle ) {
-			CCLabel* l = [CCLabel labelWithString:subtitle fontName:@"Thonburi" fontSize:16];
+			CCLabelTTF* l = [CCLabelTTF labelWithString:subtitle fontName:@"Thonburi" fontSize:16];
 			[self addChild:l z:1];
 			[l setPosition:ccp(s.width/2, s.height-80)];
 		}
@@ -457,7 +450,7 @@ Class restartAction()
 	
 	[self centerSprites:1];
 	
-	CCAnimation* animation = [CCAnimation animationWithName:@"dance"];
+	CCAnimation* animation = [CCAnimation animation];
 	for( int i=1;i<15;i++)
 		[animation addFrameWithFilename: [NSString stringWithFormat:@"grossini_dance_%02d.png", i]];
 	
@@ -517,7 +510,7 @@ Class restartAction()
 -(void) callback1
 {
 	CGSize s = [[CCDirector sharedDirector] winSize];
-	CCLabel *label = [CCLabel labelWithString:@"callback 1 called" fontName:@"Marker Felt" fontSize:16];
+	CCLabelTTF *label = [CCLabelTTF labelWithString:@"callback 1 called" fontName:@"Marker Felt" fontSize:16];
 	[label setPosition:ccp( s.width/4*1,s.height/2)];
 	
 	[self addChild:label];
@@ -526,7 +519,7 @@ Class restartAction()
 -(void) callback2:(id)sender
 {
 	CGSize s = [[CCDirector sharedDirector] winSize];
-	CCLabel *label = [CCLabel labelWithString:@"callback 2 called" fontName:@"Marker Felt" fontSize:16];
+	CCLabelTTF *label = [CCLabelTTF labelWithString:@"callback 2 called" fontName:@"Marker Felt" fontSize:16];
 	[label setPosition:ccp( s.width/4*2,s.height/2)];
 	
 	[self addChild:label];
@@ -535,7 +528,7 @@ Class restartAction()
 -(void) callback3:(id)sender data:(void*)data
 {
 	CGSize s = [[CCDirector sharedDirector] winSize];
-	CCLabel *label = [CCLabel labelWithString:@"callback 3 called" fontName:@"Marker Felt" fontSize:16];
+	CCLabelTTF *label = [CCLabelTTF labelWithString:@"callback 3 called" fontName:@"Marker Felt" fontSize:16];
 	[label setPosition:ccp( s.width/4*3,s.height/2)];
 	
 	[self addChild:label];
@@ -810,7 +803,7 @@ Class restartAction()
 {
 	NSLog(@"callback 1 called");
 	CGSize s = [[CCDirector sharedDirector] winSize];
-	CCLabel *label = [CCLabel labelWithString:@"callback 1 called" fontName:@"Marker Felt" fontSize:16];
+	CCLabelTTF *label = [CCLabelTTF labelWithString:@"callback 1 called" fontName:@"Marker Felt" fontSize:16];
 	[label setPosition:ccp( s.width/4*1,s.height/2)];
 
 	[self addChild:label];
@@ -819,7 +812,7 @@ Class restartAction()
 {
 	NSLog(@"callback 2 called from:%@", sender);
 	CGSize s = [[CCDirector sharedDirector] winSize];
-	CCLabel *label = [CCLabel labelWithString:@"callback 2 called" fontName:@"Marker Felt" fontSize:16];
+	CCLabelTTF *label = [CCLabelTTF labelWithString:@"callback 2 called" fontName:@"Marker Felt" fontSize:16];
 	[label setPosition:ccp( s.width/4*2,s.height/2)];
 
 	[self addChild:label];
@@ -827,9 +820,9 @@ Class restartAction()
 }
 -(void) callback3:(id)sender data:(void*)data
 {
-	NSLog(@"callback 3 called from:%@ with data:%x",sender,(int)data);
+	NSLog(@"callback 3 called from:%@ with data:%x",sender,(NSUInteger)data);
 	CGSize s = [[CCDirector sharedDirector] winSize];
-	CCLabel *label = [CCLabel labelWithString:@"callback 3 called" fontName:@"Marker Felt" fontSize:16];
+	CCLabelTTF *label = [CCLabelTTF labelWithString:@"callback 3 called" fontName:@"Marker Felt" fontSize:16];
 	[label setPosition:ccp( s.width/4*3,s.height/2)];
 	[self addChild:label];
 }
@@ -865,6 +858,36 @@ Class restartAction()
 -(NSString *) subtitle
 {
 	return @"CallFuncND + removeFromParentAndCleanup. Grossini dissapears in 2s";
+}
+
+@end
+
+@implementation ActionCallBlock
+-(void) onEnter
+{
+	[super onEnter];
+	
+	[self centerSprites:1];
+	
+	id action = [CCSequence actions:
+				 [CCMoveBy actionWithDuration:2 position:ccp(200,0)],
+				 [CCCallBlockN actionWithBlock:
+				  ^(CCNode *node){
+					  CCLOG(@"block called");
+					  [node removeFromParentAndCleanup:YES];
+				  } ],
+				  nil ];
+	[grossini runAction:action];
+}
+
+-(NSString *) title
+{
+	return @"CallBlock";
+}
+
+-(NSString *) subtitle
+{
+	return @"CallBlockN test. Grossini should dissaper in 2 seconds";
 }
 
 @end
@@ -969,15 +992,15 @@ Class restartAction()
 	
 	[self centerSprites:3];
 
-	id rot = [CCPropertyAction actionWithDuration:2 key:@"rotation" from:0 to:-270];
+	id rot = [CCActionTween actionWithDuration:2 key:@"rotation" from:0 to:-270];
 	id rot_back = [rot reverse];
 	id rot_seq = [CCSequence actions:rot, rot_back, nil];
 	
-	id scale = [CCPropertyAction actionWithDuration:2 key:@"scale" from:1 to:3];
+	id scale = [CCActionTween actionWithDuration:2 key:@"scale" from:1 to:3];
 	id scale_back = [scale reverse];
 	id scale_seq = [CCSequence actions:scale, scale_back, nil];
 	
-	id opacity = [CCPropertyAction actionWithDuration:2 key:@"opacity" from:255 to:0];
+	id opacity = [CCActionTween actionWithDuration:2 key:@"opacity" from:255 to:0];
 	id opacity_back = [opacity reverse];
 	id opacity_seq = [CCSequence actions:opacity, opacity_back, nil];
 	
@@ -988,7 +1011,7 @@ Class restartAction()
 
 -(NSString *) title
 {
-	return @"PropertyAction";
+	return @"ActionTween";
 }
 
 -(NSString*) subtitle
@@ -1001,6 +1024,11 @@ Class restartAction()
 
 
 // CLASS IMPLEMENTATIONS
+
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+
+#pragma mark AppController - iOS
+
 @implementation AppController
 
 - (void) applicationDidFinishLaunching:(UIApplication*)application
@@ -1029,6 +1057,10 @@ Class restartAction()
 	// Turn on display FPS
 	[director setDisplayFPS:YES];
 	
+	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
+	
 	// Default texture format for PNG/BMP/TIFF/JPEG/GIF images
 	// It can be RGBA8888, RGBA4444, RGB5_A1, RGB565
 	// You can change anytime.
@@ -1051,6 +1083,12 @@ Class restartAction()
 -(void) applicationDidBecomeActive:(UIApplication *)application
 {
 	[[CCDirector sharedDirector] resume];
+}
+
+// application will be killed
+- (void)applicationWillTerminate:(UIApplication *)application
+{	
+	CC_DIRECTOR_END();
 }
 
 // sent to background
@@ -1084,3 +1122,36 @@ Class restartAction()
 }
 
 @end
+
+#elif defined(__MAC_OS_X_VERSION_MAX_ALLOWED)
+
+#pragma mark AppController - Mac
+
+@implementation cocos2dmacAppDelegate
+
+@synthesize window=window_, glView=glView_;
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	
+	
+	CCDirector *director = [CCDirector sharedDirector];
+	
+	[director setDisplayFPS:YES];
+	
+	[director setOpenGLView:glView_];
+	
+	//	[director setProjection:kCCDirectorProjection2D];
+	
+	// Enable "moving" mouse event. Default no.
+	[window_ setAcceptsMouseMovedEvents:NO];
+	
+	
+	CCScene *scene = [CCScene node];
+	[scene addChild: [nextAction() node]];
+	
+	[director runWithScene:scene];
+}
+
+@end
+#endif
+

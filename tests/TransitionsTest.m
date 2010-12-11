@@ -10,49 +10,49 @@
 
 #define TRANSITION_DURATION (1.2f)
 
-@interface FadeWhiteTransition : CCFadeTransition 
+@interface FadeWhiteTransition : CCTransitionFade
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface FlipXLeftOver : CCFlipXTransition 
+@interface FlipXLeftOver : CCTransitionFlipX 
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface FlipXRightOver : CCFlipXTransition 
+@interface FlipXRightOver : CCTransitionFlipX 
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface FlipYUpOver : CCFlipYTransition 
+@interface FlipYUpOver : CCTransitionFlipY 
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface FlipYDownOver : CCFlipYTransition 
+@interface FlipYDownOver : CCTransitionFlipY 
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface FlipAngularLeftOver : CCFlipAngularTransition 
+@interface FlipAngularLeftOver : CCTransitionFlipAngular 
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface FlipAngularRightOver : CCFlipAngularTransition 
+@interface FlipAngularRightOver : CCTransitionFlipAngular 
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface ZoomFlipXLeftOver : CCZoomFlipXTransition 
+@interface ZoomFlipXLeftOver : CCTransitionZoomFlipX 
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface ZoomFlipXRightOver : CCZoomFlipXTransition 
+@interface ZoomFlipXRightOver : CCTransitionZoomFlipX 
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface ZoomFlipYUpOver : CCZoomFlipYTransition 
+@interface ZoomFlipYUpOver : CCTransitionZoomFlipY 
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface ZoomFlipYDownOver : CCZoomFlipYTransition 
+@interface ZoomFlipYDownOver : CCTransitionZoomFlipY 
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface ZoomFlipAngularLeftOver : CCZoomFlipAngularTransition 
+@interface ZoomFlipAngularLeftOver : CCTransitionZoomFlipAngular 
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface ZoomFlipAngularRightOver : CCZoomFlipAngularTransition 
+@interface ZoomFlipAngularRightOver : CCTransitionZoomFlipAngular 
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface PageTransitionForward : CCPageTurnTransition
+@interface TransitionPageForward : CCTransitionPageTurn
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
-@interface PageTransitionBackward : CCPageTurnTransition
+@interface TransitionPageBackward : CCTransitionPageTurn
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s;
 @end
 
@@ -124,13 +124,13 @@
 }
 @end
 
-@implementation PageTransitionForward
+@implementation TransitionPageForward
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s {
 	return [self transitionWithDuration:t scene:s backwards:NO];
 }
 @end
 
-@implementation PageTransitionBackward
+@implementation TransitionPageBackward
 +(id) transitionWithDuration:(ccTime) t scene:(CCScene*)s {
 	return [self transitionWithDuration:t scene:s backwards:YES];
 }
@@ -141,49 +141,49 @@
 
 static int sceneIdx=0;
 static NSString *transitions[] = {
-						@"CCJumpZoomTransition",
-						@"CCCrossFadeTransition",
-						@"CCRadialCCWTransition",
-						@"CCRadialCWTransition",
-						@"PageTransitionForward",
-						@"PageTransitionBackward",
-						@"CCFadeTRTransition",
-						@"CCFadeBLTransition",
-						@"CCFadeUpTransition",
-						@"CCFadeDownTransition",
-						@"CCTurnOffTilesTransition",
-						@"CCSplitRowsTransition",
-						@"CCSplitColsTransition",
-						@"CCFadeTransition",
-						@"FadeWhiteTransition",
-						@"FlipXLeftOver",
-						@"FlipXRightOver",
-						@"FlipYUpOver",
-						@"FlipYDownOver",
-						@"FlipAngularLeftOver",
-						@"FlipAngularRightOver",
-						@"ZoomFlipXLeftOver",
-						@"ZoomFlipXRightOver",
-						@"ZoomFlipYUpOver",
-						@"ZoomFlipYDownOver",
-						@"ZoomFlipAngularLeftOver",
-						@"ZoomFlipAngularRightOver",
-						@"CCShrinkGrowTransition",
-						@"CCRotoZoomTransition",
-						@"CCMoveInLTransition",
-						@"CCMoveInRTransition",
-						@"CCMoveInTTransition",
-						@"CCMoveInBTransition",
-						@"CCSlideInLTransition",
-						@"CCSlideInRTransition",
-						@"CCSlideInTTransition",
-						@"CCSlideInBTransition",
+	@"CCTransitionJumpZoom",
+	@"CCTransitionCrossFade",
+	@"CCTransitionRadialCCW",
+	@"CCTransitionRadialCW",
+	@"TransitionPageForward",
+	@"TransitionPageBackward",
+	@"CCTransitionFadeTR",
+	@"CCTransitionFadeBL",
+	@"CCTransitionFadeUp",
+	@"CCTransitionFadeDown",
+	@"CCTransitionTurnOffTiles",
+	@"CCTransitionSplitRows",
+	@"CCTransitionSplitCols",
+	@"CCTransitionFade",
+	@"FadeWhiteTransition",
+	@"FlipXLeftOver",
+	@"FlipXRightOver",
+	@"FlipYUpOver",
+	@"FlipYDownOver",
+	@"FlipAngularLeftOver",
+	@"FlipAngularRightOver",
+	@"ZoomFlipXLeftOver",
+	@"ZoomFlipXRightOver",
+	@"ZoomFlipYUpOver",
+	@"ZoomFlipYDownOver",
+	@"ZoomFlipAngularLeftOver",
+	@"ZoomFlipAngularRightOver",
+	@"CCTransitionShrinkGrow",
+	@"CCTransitionRotoZoom",
+	@"CCTransitionMoveInL",
+	@"CCTransitionMoveInR",
+	@"CCTransitionMoveInT",
+	@"CCTransitionMoveInB",
+	@"CCTransitionSlideInL",
+	@"CCTransitionSlideInR",
+	@"CCTransitionSlideInT",
+	@"CCTransitionSlideInB",
 };
 
 Class nextTransition()
 {	
 	// HACK: else NSClassFromString will fail
-	[CCRadialCCWTransition node];
+	[CCTransitionRadialCCW node];
 	
 	sceneIdx++;
 	sceneIdx = sceneIdx % ( sizeof(transitions) / sizeof(transitions[0]) );
@@ -195,7 +195,7 @@ Class nextTransition()
 Class backTransition()
 {
 	// HACK: else NSClassFromString will fail
-	[CCFadeTransition node];
+	[CCTransitionFade node];
 
 	sceneIdx--;
 	int total = ( sizeof(transitions) / sizeof(transitions[0]) );
@@ -209,7 +209,7 @@ Class backTransition()
 Class restartTransition()
 {
 	// HACK: else NSClassFromString will fail
-	[CCFadeTransition node];
+	[CCTransitionFade node];
 
 	NSString *r = transitions[sceneIdx];
 	Class c = NSClassFromString(r);
@@ -228,21 +228,26 @@ Class restartTransition()
 		y = size.height;
 
 		CCSprite *bg1;
+		
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 		if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
 			bg1 = [CCSprite spriteWithFile:@"background1-ipad.jpg"];
 		} else {
 			bg1 = [CCSprite spriteWithFile:@"background1.jpg"];
 		}
+#elif defined(__MAC_OS_X_VERSION_MAX_ALLOWED)
+		bg1 = [CCSprite spriteWithFile:@"background1.jpg"];
+#endif // Mac
 		
 		bg1.position = ccp(size.width/2, size.height/2);
 		[self addChild:bg1 z:-1];
 
-		CCLabel* title = [CCLabel labelWithString:transitions[sceneIdx] fontName:@"Thonburi" fontSize:40];
+		CCLabelTTF *title = [CCLabelTTF labelWithString:transitions[sceneIdx] fontName:@"Thonburi" fontSize:40];
 		[self addChild:title];
 		[title setColor:ccc3(255,32,32)];
 		[title setPosition: ccp(x/2, y-100)];
 
-		CCLabel* label = [CCLabel labelWithString:@"SCENE 1" fontName:@"Marker Felt" fontSize:64];
+		CCLabelTTF *label = [CCLabelTTF labelWithString:@"SCENE 1" fontName:@"Marker Felt" fontSize:64];
 		[label setColor:ccc3(16,16,255)];
 		[label setPosition: ccp(x/2,y/2)];	
 		[self addChild: label];
@@ -332,20 +337,24 @@ Class restartTransition()
 		y = size.height;
 		
 		CCSprite *bg2;
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 		if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
 			bg2 = [CCSprite spriteWithFile:@"background2-ipad.jpg"];
 		} else {
 			bg2 = [CCSprite spriteWithFile:@"background2.jpg"];
-		}		
+		}
+#elif defined(__MAC_OS_X_VERSION_MAX_ALLOWED)
+		bg2 = [CCSprite spriteWithFile:@"background2.jpg"];
+#endif // Mac
 		bg2.position = ccp(size.width/2, size.height/2);
 		[self addChild:bg2 z:-1];
 		
-		CCLabel* title = [CCLabel labelWithString:transitions[sceneIdx] fontName:@"Thonburi" fontSize:40];
+		CCLabelTTF *title = [CCLabelTTF labelWithString:transitions[sceneIdx] fontName:@"Thonburi" fontSize:40];
 		[self addChild:title];
 		[title setColor:ccc3(255,32,32)];
 		[title setPosition: ccp(x/2, y-100)];		
 		
-		CCLabel* label = [CCLabel labelWithString:@"SCENE 2" fontName:@"Marker Felt" fontSize:64];
+		CCLabelTTF *label = [CCLabelTTF labelWithString:@"SCENE 2" fontName:@"Marker Felt" fontSize:64];
 		[label setColor:ccc3(16,16,255)];
 		[label setPosition: ccp(x/2,y/2)];
 		[self addChild: label];
@@ -424,6 +433,12 @@ Class restartTransition()
 @end
 
 // CLASS IMPLEMENTATIONS
+
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+
+#pragma mark -
+#pragma mark AppController - iPhone
+
 @implementation AppController
 
 @synthesize window;
@@ -455,12 +470,16 @@ Class restartTransition()
 	// On the other hand "Flip" transitions doesn't work with DepthBuffer > 0
 	EAGLView *glView = [EAGLView viewWithFrame:[window bounds]
 								   pixelFormat:kEAGLColorFormatRGBA8
-								   depthFormat:0 //GL_DEPTH_COMPONENT24_OES
-							preserveBackbuffer:NO];
+								   depthFormat:0 // GL_DEPTH_COMPONENT24_OES
+						];
 	[glView setMultipleTouchEnabled:YES];
 	
 	// connect it to the director
 	[director setOpenGLView:glView];
+	
+	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
 	
 	// glview is a child of the main window
 	[window addSubview:glView];
@@ -504,7 +523,9 @@ Class restartTransition()
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {	
-	[[CCDirector sharedDirector] end];
+	CCDirector *director = [CCDirector sharedDirector];
+	[[director openGLView] removeFromSuperview];
+	[director end];
 }
 
 // purge memory
@@ -526,3 +547,36 @@ Class restartTransition()
 }
 
 @end
+
+#pragma mark -
+#pragma mark AppController - Mac
+
+#elif defined(__MAC_OS_X_VERSION_MAX_ALLOWED)
+
+@implementation cocos2dmacAppDelegate
+
+@synthesize window=window_, glView=glView_;
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	
+	
+	CCDirector *director = [CCDirector sharedDirector];
+	
+	[director setDisplayFPS:YES];
+	
+	[director setOpenGLView:glView_];
+	
+	//	[director setProjection:kCCDirectorProjection2D];
+	
+	// Enable "moving" mouse event. Default no.
+	[window_ setAcceptsMouseMovedEvents:NO];
+	
+	
+	CCScene *scene = [CCScene node];
+	[scene addChild: [TextLayer node]];
+	
+	[director runWithScene:scene];
+}
+
+@end
+#endif

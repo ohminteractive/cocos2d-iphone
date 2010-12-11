@@ -21,7 +21,7 @@
 	NSArray *array = [UIFont familyNames];
 	for( NSString *s in array )
 		NSLog( @"%@",s );
-	CCLabel* label = [CCLabel labelWithString:@"cocos2d" fontName:@"Marker Felt" fontSize:64];
+	CCLabelTTF *label = [CCLabelTTF labelWithString:@"cocos2d" fontName:@"Marker Felt" fontSize:64];
 
 	[label setPosition: ccp(x/2,y/2)];
 	
@@ -67,11 +67,11 @@
 	
 	[sprite runAction: rot];
 
-	CCIntervalAction *jump1 = [CCJumpBy actionWithDuration:4 position:ccp(-400,0) height:100 jumps:4];
-	CCIntervalAction *jump2 = [jump1 reverse];
+	CCActionInterval *jump1 = [CCJumpBy actionWithDuration:4 position:ccp(-400,0) height:100 jumps:4];
+	CCActionInterval *jump2 = [jump1 reverse];
 	
-	CCIntervalAction *rot1 = [CCRotateBy actionWithDuration:4 angle:360*2];
-	CCIntervalAction *rot2 = [rot1 reverse];
+	CCActionInterval *rot1 = [CCRotateBy actionWithDuration:4 angle:360*2];
+	CCActionInterval *rot2 = [rot1 reverse];
 	
 	[spriteSister1 runAction: [CCRepeat actionWithAction: [CCSequence actions:jump2, jump1, nil] times:5 ] ];
 	[spriteSister2 runAction: [CCRepeat actionWithAction: [CCSequence actions:[[jump1 copy] autorelease], [[jump2 copy] autorelease], nil] times:5 ] ];
@@ -171,6 +171,10 @@
 	// Turn on display FPS
 	[director setDisplayFPS:YES];
 	
+	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
+	
 	// Default texture format for PNG/BMP/TIFF/JPEG/GIF images
 	// It can be RGBA8888, RGBA4444, RGB5_A1, RGB565
 	// You can change anytime.
@@ -210,9 +214,10 @@
 	[[CCDirector sharedDirector] startAnimation];
 }
 
+// application will be killed
 - (void)applicationWillTerminate:(UIApplication *)application
 {	
-	[[CCDirector sharedDirector] end];
+	CC_DIRECTOR_END();
 }
 
 // purge memory

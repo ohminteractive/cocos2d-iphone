@@ -2,7 +2,7 @@ cocos2d for iPhone
 ==================
 
 [cocos2d for iPhone][1] is a framework for building 2D games, demos, and other
-graphical/interactive applications for iPod Touch, iPhone and iPad. 
+graphical/interactive applications for iPod Touch, iPhone, iPad and Mac.
 It is based on the [cocos2d][2] design but instead of using python it, uses objective-c.
 
 
@@ -27,32 +27,34 @@ Main features
    * Tile Map support: Orthogonal, Isometric and Hexagonal
    * Parallax scrolling
    * Motion Streak
+   * Render Texture
    * High Score server (cocosLive library)
-   * Touch/Accelerometer
+   * Touch/Accelerometer on iOS
+   * Mouse/Keyboard on Mac
    * Portrait and Landscape mode
    * Sound Engine support (CocosDenshion library)
    * Integrated Pause/Resume
    * Integrated Slow motion/Fast forward
-   * Fast textures: PVRTC 2-bit & 4-bit textures, RGBA 16-bit (and 32-bit) textures
+   * Fast textures: PVR compressed and uncompressed textures
+   * Point based: iPhone4 + RetinaDisplay mode compatible
    * Language: objective-c
    * Open Source: Compatible with open and closed source projects
-   * OpenGL ES 1.1 based
+   * OpenGL ES 1.1  / OpenGL 1.5 based
 
 
-This library does not work with the toolchain, but it
-should be easy to port it to it.
+This library does not work with the toolchain, but it should be easy to port it to it.
 
 
 Build Requirements
 ------------------
 
-Mac OS X 10.5.3, Xcode 3.1, iPhone OS 2.0, Beta 8 release or later
+Mac OS X 10.6, Xcode 3.2.3 (or newer)
 
 
 Runtime Requirements
 --------------------
-
-Mac OS X 10.5.3, iPhone OS 2.0, Beta 8 release or later
+  * iOS 3.0 or newer for iOS games
+  * Snow Leopard (v10.5) or newer for Mac games
 
 
 Files and Folders
@@ -65,7 +67,9 @@ Files and Folders
   * CocosDenshion/  
      sound engine library
   * tests/  
-     tests, demo and template examples
+     tests, demo examples
+  * templates/
+     folder that contains the Xcode templates
   * experimental/  
      experimental stuff
   * external/  

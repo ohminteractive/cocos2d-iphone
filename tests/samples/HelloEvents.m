@@ -40,8 +40,8 @@ enum {
 		// CCLabel
 		//
 		
-		// create and initialize a CCLabel
-		CCLabel* label = [CCLabel labelWithString:@"Hello Events" fontName:@"Marker Felt" fontSize:64];
+		// create and initialize a CCLabelTTF
+		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Hello Events" fontName:@"Marker Felt" fontSize:64];
 
 		// ask director the the window size
 		CGSize size = [[CCDirector sharedDirector] winSize];
@@ -168,6 +168,10 @@ enum {
 	EAGLView *glView = [director openGLView];
 	[glView setMultipleTouchEnabled:YES];	
 	
+	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
+	
 	// Create and initialize parent and empty Scene
 	CCScene *scene = [CCScene node];
 
@@ -210,7 +214,7 @@ enum {
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {	
-	[[CCDirector sharedDirector] end];
+	CC_DIRECTOR_END();
 }
 
 // purge memory

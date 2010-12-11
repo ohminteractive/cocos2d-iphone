@@ -23,11 +23,11 @@
 		[self addChild:sun];
 
 		// timers
-		label0 = [CCBitmapFontAtlas bitmapFontAtlasWithString:@"0" fntFile:@"bitmapFontTest4.fnt"];
-		label1 = [CCBitmapFontAtlas bitmapFontAtlasWithString:@"0" fntFile:@"bitmapFontTest4.fnt"];
-		label2 = [CCBitmapFontAtlas bitmapFontAtlasWithString:@"0" fntFile:@"bitmapFontTest4.fnt"];
-		label3 = [CCBitmapFontAtlas bitmapFontAtlasWithString:@"0" fntFile:@"bitmapFontTest4.fnt"];
-		label4 = [CCBitmapFontAtlas bitmapFontAtlasWithString:@"0" fntFile:@"bitmapFontTest4.fnt"];
+		label0 = [CCLabelBMFont labelWithString:@"0" fntFile:@"bitmapFontTest4.fnt"];
+		label1 = [CCLabelBMFont labelWithString:@"0" fntFile:@"bitmapFontTest4.fnt"];
+		label2 = [CCLabelBMFont labelWithString:@"0" fntFile:@"bitmapFontTest4.fnt"];
+		label3 = [CCLabelBMFont labelWithString:@"0" fntFile:@"bitmapFontTest4.fnt"];
+		label4 = [CCLabelBMFont labelWithString:@"0" fntFile:@"bitmapFontTest4.fnt"];
 		
 		[self scheduleUpdate];
 		[self schedule: @selector(step1:)];
@@ -155,6 +155,10 @@
 	// Sets landscape mode
 	[director setDeviceOrientation:kCCDeviceOrientationLandscapeLeft];
 	
+	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
+	
 	// Turn on display FPS
 	[director setDisplayFPS:YES];
 	
@@ -187,10 +191,12 @@
 	[[CCDirector sharedDirector] startAnimation];
 }
 
+// application will be killed
 - (void)applicationWillTerminate:(UIApplication *)application
 {	
-	[[CCDirector sharedDirector] end];
+	CC_DIRECTOR_END();
 }
+
 
 // purge memory
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application

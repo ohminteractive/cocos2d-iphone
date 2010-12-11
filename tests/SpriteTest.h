@@ -1,11 +1,25 @@
 #import "cocos2d.h"
 
 //CLASS INTERFACE
-@interface AppController : NSObject <UIAccelerometerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIApplicationDelegate>
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+@interface AppController : NSObject <UIApplicationDelegate>
 {
-	UIWindow	*window;
+	UIWindow *window;
 }
 @end
+
+#elif defined(__MAC_OS_X_VERSION_MAX_ALLOWED)
+@interface cocos2dmacAppDelegate : NSObject <NSApplicationDelegate>
+{
+	NSWindow	*window_;
+	MacGLView	*glView_;
+}
+
+@property (assign) IBOutlet NSWindow	*window;
+@property (assign) IBOutlet MacGLView	*glView;
+
+@end
+#endif // Mac
 
 @interface SpriteDemo: CCLayer
 {
@@ -21,7 +35,7 @@
 -(void) addNewSpriteWithCoords:(CGPoint)p;
 @end
 
-@interface SpriteSheet1 : SpriteDemo
+@interface SpriteBatchNode1 : SpriteDemo
 {}
 -(void) addNewSpriteWithCoords:(CGPoint)p;
 @end
@@ -30,7 +44,7 @@
 {}
 @end
 
-@interface SpriteSheetColorOpacity : SpriteDemo
+@interface SpriteBatchNodeColorOpacity : SpriteDemo
 {}
 @end
 
@@ -40,21 +54,30 @@
 }
 @end
 
-@interface SpriteSheetZOrder : SpriteDemo
+@interface SpriteBatchNodeZOrder : SpriteDemo
 {
 	int dir;
 }
 @end
 
-@interface SpriteSheetReorder : SpriteDemo
+@interface SpriteBatchNodeReorder : SpriteDemo
 {}
 @end
 
-@interface SpriteSheetReorderIssue744 : SpriteDemo
+@interface SpriteBatchNodeReorderIssue744 : SpriteDemo
 {}
 @end
 
-@interface SpriteSheetReorderIssue767 : SpriteDemo
+@interface SpriteBatchNodeReorderIssue766 : SpriteDemo
+{
+	CCSpriteBatchNode *batchNode;
+	CCSprite *sprite1;
+	CCSprite *sprite2;
+	CCSprite *sprite3;	
+}
+@end
+
+@interface SpriteBatchNodeReorderIssue767 : SpriteDemo
 {}
 @end
 
@@ -65,7 +88,7 @@
 }
 @end
 
-@interface SpriteSheetZVertex : SpriteDemo
+@interface SpriteBatchNodeZVertex : SpriteDemo
 {
 	int dir;
 	float	time;
@@ -77,7 +100,7 @@
 {}
 @end
 
-@interface SpriteSheetAnchorPoint : SpriteDemo
+@interface SpriteBatchNodeAnchorPoint : SpriteDemo
 {}
 @end
 
@@ -89,7 +112,7 @@
 {}
 @end
 
-@interface SpriteSheetFlip : SpriteDemo
+@interface SpriteBatchNodeFlip : SpriteDemo
 {}
 @end
 
@@ -97,7 +120,7 @@
 {}
 @end
 
-@interface SpriteSheetAliased : SpriteDemo
+@interface SpriteBatchNodeAliased : SpriteDemo
 {}
 @end
 
@@ -110,7 +133,7 @@
 -(void) addNewSprite;
 @end
 
-@interface SpriteSheetNewTexture : SpriteDemo
+@interface SpriteBatchNodeNewTexture : SpriteDemo
 {
 	CCTexture2D	*texture1;
 	CCTexture2D	*texture2;
@@ -129,11 +152,15 @@
 }
 @end
 
+@interface SpriteFrameAliasNameTest : SpriteDemo
+{}
+@end
+
 @interface SpriteOffsetAnchorRotation : SpriteDemo
 {}
 @end
 
-@interface SpriteSheetOffsetAnchorRotation : SpriteDemo
+@interface SpriteBatchNodeOffsetAnchorRotation : SpriteDemo
 {}
 @end
 
@@ -141,25 +168,25 @@
 {}
 @end
 
-@interface SpriteSheetOffsetAnchorScale : SpriteDemo
+@interface SpriteBatchNodeOffsetAnchorScale : SpriteDemo
 {}
 @end
 
 @interface SpriteHybrid : SpriteDemo
 {
-	BOOL	usingSpriteSheet;
+	BOOL	usingSpriteBatchNode;
 }
 @end
 
-@interface SpriteSheetChildren : SpriteDemo
+@interface SpriteBatchNodeChildren : SpriteDemo
 {}
 @end
 
-@interface SpriteSheetChildren2 : SpriteDemo
+@interface SpriteBatchNodeChildren2 : SpriteDemo
 {}
 @end
 
-@interface SpriteSheetChildrenZ : SpriteDemo
+@interface SpriteBatchNodeChildrenZ : SpriteDemo
 {}
 @end
 
@@ -167,15 +194,19 @@
 {}
 @end
 
+@interface SpriteChildrenVisibilityIssue665 : SpriteDemo
+{}
+@end
+
 @interface SpriteChildrenAnchorPoint : SpriteDemo
 {}
 @end
 
-@interface SpriteSheetChildrenAnchorPoint : SpriteDemo
+@interface SpriteBatchNodeChildrenAnchorPoint : SpriteDemo
 {}
 @end
 
-@interface SpriteSheetChildrenScale : SpriteDemo
+@interface SpriteBatchNodeChildrenScale : SpriteDemo
 {}
 @end
 
@@ -183,7 +214,7 @@
 {}
 @end
 
-@interface SpriteSheetChildrenChildren: SpriteDemo
+@interface SpriteBatchNodeChildrenChildren: SpriteDemo
 {}
 @end
 
@@ -192,6 +223,10 @@
 @end
 
 @interface SpriteSubclass : SpriteDemo
+{}
+@end
+
+@interface AnimationCache : SpriteDemo
 {}
 @end
 

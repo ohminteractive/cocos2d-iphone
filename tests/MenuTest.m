@@ -15,6 +15,7 @@ enum {
 
 #pragma mark -
 #pragma mark MainMenu
+
 @implementation Layer1
 -(id) init
 {
@@ -34,7 +35,7 @@ enum {
 		CCMenuItem *item2 = [CCMenuItemImage itemFromNormalImage:@"SendScoreButton.png" selectedImage:@"SendScoreButtonPressed.png" target:self selector:@selector(menuCallback2:)];
 
 		// Label Item (LabelAtlas)
-		CCLabelAtlas *labelAtlas = [CCLabelAtlas labelAtlasWithString:@"0123456789" charMapFile:@"fps_images.png" itemWidth:16 itemHeight:24 startCharMap:'.'];
+		CCLabelAtlas *labelAtlas = [CCLabelAtlas labelWithString:@"0123456789" charMapFile:@"fps_images.png" itemWidth:16 itemHeight:24 startCharMap:'.'];
 		CCMenuItemLabel *item3 = [CCMenuItemLabel itemWithLabel:labelAtlas target:self selector:@selector(menuCallbackDisabled:)];
 		item3.disabledColor = ccc3(32,32,64);
 		item3.color = ccc3(200,200,255);
@@ -44,7 +45,7 @@ enum {
 		CCMenuItem *item4 = [CCMenuItemFont itemFromString: @"I toggle enable items" target: self selector:@selector(menuCallbackEnable:)];
 		
 		// Label Item (BitmapFontAtlas)
-		CCBitmapFontAtlas *label = [CCBitmapFontAtlas bitmapFontAtlasWithString:@"configuration" fntFile:@"bitmapFontTest3.fnt"];
+		CCLabelBMFont *label = [CCLabelBMFont labelWithString:@"configuration" fntFile:@"bitmapFontTest3.fnt"];
 		CCMenuItemLabel *item5 = [CCMenuItemLabel itemWithLabel:label target:self selector:@selector(menuCallbackConfig:)];
 		
 		// Testing issue #500
@@ -74,7 +75,7 @@ enum {
 			[child runAction: 
 			 [CCEaseElasticOut actionWithAction:
 			  [CCMoveBy actionWithDuration:2 position:ccp(dstPoint.x - offset,0)]
-									   period: 0.35f]
+										 period: 0.35f]
 			];
 			i++;
 		}
@@ -118,14 +119,7 @@ enum {
 
 -(void) onQuit: (id) sender
 {
-	CC_DIRECTOR_END();
-	
-	// HA HA... no more terminate on sdk v3.0
-	// http://developer.apple.com/iphone/library/qa/qa2008/qa1561.html
-	if( [[UIApplication sharedApplication] respondsToSelector:@selector(terminate)] )
-		[[UIApplication sharedApplication] performSelector:@selector(terminate)];
-	else
-		NSLog(@"YOU CAN'T TERMINATE YOUR APPLICATION PROGRAMATICALLY in SDK 3.0+");
+	CC_DIRECTOR_END();	
 }
 @end
 
@@ -177,28 +171,38 @@ enum {
 {
 	if( (self=[super init]) ) {
 			
-		for( int i=0;i < 2;i++ ) {
-			CCMenuItemImage *item1 = [CCMenuItemImage itemFromNormalImage:@"btn-play-normal.png" selectedImage:@"btn-play-selected.png" target:self selector:@selector(menuCallbackBack:)];
-			CCMenuItemImage *item2 = [CCMenuItemImage itemFromNormalImage:@"btn-highscores-normal.png" selectedImage:@"btn-highscores-selected.png" target:self selector:@selector(menuCallbackOpacity:)];
-			CCMenuItemImage *item3 = [CCMenuItemImage itemFromNormalImage:@"btn-about-normal.png" selectedImage:@"btn-about-selected.png" target:self selector:@selector(menuCallbackAlign:)];
-			
-			item1.scaleX = 1.5f;
-			item2.scaleY = 0.5f;
-			item3.scaleX = 0.5f;
-			
-			CCMenu *menu = [CCMenu menuWithItems:item1, item2, item3, nil];
-			
-			menu.tag = kTagMenu;
-			
-			[self addChild:menu z:0 tag:100+i];
-			centeredMenu = menu.position;
-		}
-
-		alignedH = YES;
-		[self alignMenusH];
 	}
 
 	return self;
+}
+
+// Testing issue #1018 and #1021
+-(void) onEnter
+{	
+	[super onEnter];
+
+	// remove previously added children
+	[self removeAllChildrenWithCleanup:YES];
+	
+	for( int i=0;i < 2;i++ ) {
+		CCMenuItemImage *item1 = [CCMenuItemImage itemFromNormalImage:@"btn-play-normal.png" selectedImage:@"btn-play-selected.png" target:self selector:@selector(menuCallbackBack:)];
+		CCMenuItemImage *item2 = [CCMenuItemImage itemFromNormalImage:@"btn-highscores-normal.png" selectedImage:@"btn-highscores-selected.png" target:self selector:@selector(menuCallbackOpacity:)];
+		CCMenuItemImage *item3 = [CCMenuItemImage itemFromNormalImage:@"btn-about-normal.png" selectedImage:@"btn-about-selected.png" target:self selector:@selector(menuCallbackAlign:)];
+		
+		item1.scaleX = 1.5f;
+		item2.scaleY = 0.5f;
+		item3.scaleX = 0.5f;
+		
+		CCMenu *menu = [CCMenu menuWithItems:item1, item2, item3, nil];
+		
+		menu.tag = kTagMenu;
+		
+		[self addChild:menu z:0 tag:100+i];
+		centeredMenu = menu.position;
+	}
+	
+	alignedH = YES;
+	[self alignMenusH];
 }
 
 -(void) dealloc
@@ -242,7 +246,7 @@ enum {
 		[CCMenuItemFont setFontName: @"Marker Felt"];
 		[CCMenuItemFont setFontSize:28];
 
-		CCBitmapFontAtlas *label = [CCBitmapFontAtlas bitmapFontAtlasWithString:@"Enable AtlasItem" fntFile:@"bitmapFontTest3.fnt"];
+		CCLabelBMFont *label = [CCLabelBMFont labelWithString:@"Enable AtlasItem" fntFile:@"bitmapFontTest3.fnt"];
 		CCMenuItemLabel *item1 = [CCMenuItemLabel itemWithLabel:label target:self selector:@selector(menuCallback2:)];
 		CCMenuItemFont *item2 = [CCMenuItemFont itemFromString: @"--- Go Back ---" target:self selector:@selector(menuCallback:)];
 		
@@ -309,83 +313,84 @@ enum {
 @implementation Layer4
 -(id) init
 {
-	[super init];
+	if( (self = [super init] ) ) {
 
-	[CCMenuItemFont setFontName: @"American Typewriter"];
-	[CCMenuItemFont setFontSize:18];
-	CCMenuItemFont *title1 = [CCMenuItemFont itemFromString: @"Sound"];
-    [title1 setIsEnabled:NO];
-	[CCMenuItemFont setFontName: @"Marker Felt"];
-	[CCMenuItemFont setFontSize:34];
-    CCMenuItemToggle *item1 = [CCMenuItemToggle itemWithTarget:self selector:@selector(menuCallback:) items:
-                             [CCMenuItemFont itemFromString: @"On"],
-                             [CCMenuItemFont itemFromString: @"Off"],
-                             nil];
-    
-	[CCMenuItemFont setFontName: @"American Typewriter"];
-	[CCMenuItemFont setFontSize:18];
-	CCMenuItemFont *title2 = [CCMenuItemFont itemFromString: @"Music"];
-    [title2 setIsEnabled:NO];
-	[CCMenuItemFont setFontName: @"Marker Felt"];
-	[CCMenuItemFont setFontSize:34];
-    CCMenuItemToggle *item2 = [CCMenuItemToggle itemWithTarget:self selector:@selector(menuCallback:) items:
-                             [CCMenuItemFont itemFromString: @"On"],
-                             [CCMenuItemFont itemFromString: @"Off"],
-                             nil];
-    
-	[CCMenuItemFont setFontName: @"American Typewriter"];
-	[CCMenuItemFont setFontSize:18];
-	CCMenuItemFont *title3 = [CCMenuItemFont itemFromString: @"Quality"];
-    [title3 setIsEnabled:NO];
-	[CCMenuItemFont setFontName: @"Marker Felt"];
-	[CCMenuItemFont setFontSize:34];
-    CCMenuItemToggle *item3 = [CCMenuItemToggle itemWithTarget:self selector:@selector(menuCallback:) items:
-                             [CCMenuItemFont itemFromString: @"High"],
-                             [CCMenuItemFont itemFromString: @"Low"],
-                             nil];
-    
-	[CCMenuItemFont setFontName: @"American Typewriter"];
-	[CCMenuItemFont setFontSize:18];
-	CCMenuItemFont *title4 = [CCMenuItemFont itemFromString: @"Orientation"];
-    [title4 setIsEnabled:NO];
-	[CCMenuItemFont setFontName: @"Marker Felt"];
-	[CCMenuItemFont setFontSize:34];
-    CCMenuItemToggle *item4 = [CCMenuItemToggle itemWithTarget:self selector:@selector(menuCallback:) items:
-                             [CCMenuItemFont itemFromString: @"Off"], nil];
-	
-	NSArray *more_items = [NSArray arrayWithObjects:
-                             [CCMenuItemFont itemFromString: @"33%"],
-                             [CCMenuItemFont itemFromString: @"66%"],
-                             [CCMenuItemFont itemFromString: @"100%"],
-                             nil];
-	// TIP: you can manipulate the items like any other NSMutableArray
-	[item4.subItems addObjectsFromArray: more_items];
-	
-    // you can change the one of the items by doing this
-    item4.selectedIndex = 2;
-    
-    [CCMenuItemFont setFontName: @"Marker Felt"];
-	[CCMenuItemFont setFontSize:34];
-	
-	CCBitmapFontAtlas *label = [CCBitmapFontAtlas bitmapFontAtlasWithString:@"go back" fntFile:@"bitmapFontTest3.fnt"];
-	CCMenuItemLabel *back = [CCMenuItemLabel itemWithLabel:label target:self selector:@selector(backCallback:)];
-    
-	CCMenu *menu = [CCMenu menuWithItems:
-                  title1, title2,
-                  item1, item2,
-                  title3, title4,
-                  item3, item4,
-                  back, nil]; // 9 items.
-    [menu alignItemsInColumns:
-     [NSNumber numberWithUnsignedInt:2],
-     [NSNumber numberWithUnsignedInt:2],
-     [NSNumber numberWithUnsignedInt:2],
-     [NSNumber numberWithUnsignedInt:2],
-     [NSNumber numberWithUnsignedInt:1],
-     nil
-    ]; // 2 + 2 + 2 + 2 + 1 = total count of 9.
-    
-	[self addChild: menu];
+		[CCMenuItemFont setFontName: @"American Typewriter"];
+		[CCMenuItemFont setFontSize:18];
+		CCMenuItemFont *title1 = [CCMenuItemFont itemFromString: @"Sound"];
+		[title1 setIsEnabled:NO];
+		[CCMenuItemFont setFontName: @"Marker Felt"];
+		[CCMenuItemFont setFontSize:34];
+		CCMenuItemToggle *item1 = [CCMenuItemToggle itemWithTarget:self selector:@selector(menuCallback:) items:
+								 [CCMenuItemFont itemFromString: @"On"],
+								 [CCMenuItemFont itemFromString: @"Off"],
+								 nil];
+		
+		[CCMenuItemFont setFontName: @"American Typewriter"];
+		[CCMenuItemFont setFontSize:18];
+		CCMenuItemFont *title2 = [CCMenuItemFont itemFromString: @"Music"];
+		[title2 setIsEnabled:NO];
+		[CCMenuItemFont setFontName: @"Marker Felt"];
+		[CCMenuItemFont setFontSize:34];
+		CCMenuItemToggle *item2 = [CCMenuItemToggle itemWithTarget:self selector:@selector(menuCallback:) items:
+								 [CCMenuItemFont itemFromString: @"On"],
+								 [CCMenuItemFont itemFromString: @"Off"],
+								 nil];
+		
+		[CCMenuItemFont setFontName: @"American Typewriter"];
+		[CCMenuItemFont setFontSize:18];
+		CCMenuItemFont *title3 = [CCMenuItemFont itemFromString: @"Quality"];
+		[title3 setIsEnabled:NO];
+		[CCMenuItemFont setFontName: @"Marker Felt"];
+		[CCMenuItemFont setFontSize:34];
+		CCMenuItemToggle *item3 = [CCMenuItemToggle itemWithTarget:self selector:@selector(menuCallback:) items:
+								 [CCMenuItemFont itemFromString: @"High"],
+								 [CCMenuItemFont itemFromString: @"Low"],
+								 nil];
+		
+		[CCMenuItemFont setFontName: @"American Typewriter"];
+		[CCMenuItemFont setFontSize:18];
+		CCMenuItemFont *title4 = [CCMenuItemFont itemFromString: @"Orientation"];
+		[title4 setIsEnabled:NO];
+		[CCMenuItemFont setFontName: @"Marker Felt"];
+		[CCMenuItemFont setFontSize:34];
+		CCMenuItemToggle *item4 = [CCMenuItemToggle itemWithTarget:self selector:@selector(menuCallback:) items:
+								 [CCMenuItemFont itemFromString: @"Off"], nil];
+		
+		NSArray *more_items = [NSArray arrayWithObjects:
+								 [CCMenuItemFont itemFromString: @"33%"],
+								 [CCMenuItemFont itemFromString: @"66%"],
+								 [CCMenuItemFont itemFromString: @"100%"],
+								 nil];
+		// TIP: you can manipulate the items like any other NSMutableArray
+		[item4.subItems addObjectsFromArray: more_items];
+		
+		// you can change the one of the items by doing this
+		item4.selectedIndex = 2;
+		
+		[CCMenuItemFont setFontName: @"Marker Felt"];
+		[CCMenuItemFont setFontSize:34];
+		
+		CCLabelBMFont *label = [CCLabelBMFont labelWithString:@"go back" fntFile:@"bitmapFontTest3.fnt"];
+		CCMenuItemLabel *back = [CCMenuItemLabel itemWithLabel:label target:self selector:@selector(backCallback:)];
+		
+		CCMenu *menu = [CCMenu menuWithItems:
+					  title1, title2,
+					  item1, item2,
+					  title3, title4,
+					  item3, item4,
+					  back, nil]; // 9 items.
+		[menu alignItemsInColumns:
+		 [NSNumber numberWithUnsignedInt:2],
+		 [NSNumber numberWithUnsignedInt:2],
+		 [NSNumber numberWithUnsignedInt:2],
+		 [NSNumber numberWithUnsignedInt:2],
+		 [NSNumber numberWithUnsignedInt:1],
+		 nil
+		]; // 2 + 2 + 2 + 2 + 1 = total count of 9.
+		
+		[self addChild: menu];
+	}
 	
 	return self;
 }
@@ -410,8 +415,13 @@ enum {
 
 
 // CLASS IMPLEMENTATIONS
-@implementation AppController
 
+#pragma mark -
+#pragma mark AppController - iPhone
+
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+
+@implementation AppController
 - (void) applicationDidFinishLaunching:(UIApplication*)application
 {
 	// CC_DIRECTOR_INIT()
@@ -434,6 +444,10 @@ enum {
 	
 	// before creating any layer, set the landscape mode
 	[director setDeviceOrientation:kCCDeviceOrientationLandscapeLeft];
+		
+	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
 	
 	// display FPS (useful when debugging)
 	[director setDisplayFPS:YES];
@@ -473,10 +487,12 @@ enum {
 	[[CCDirector sharedDirector] startAnimation];
 }
 
+// application will be killed
 - (void)applicationWillTerminate:(UIApplication *)application
 {	
-	[[CCDirector sharedDirector] end];
+	CC_DIRECTOR_END();
 }
+
 
 // purge memory
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
@@ -495,5 +511,39 @@ enum {
 	[window dealloc];
 	[super dealloc];
 }
+@end
+
+#pragma mark -
+#pragma mark AppController - Mac
+
+#elif defined(__MAC_OS_X_VERSION_MAX_ALLOWED)
+
+@implementation cocos2dmacAppDelegate
+
+@synthesize window=window_, glView=glView_;
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	
+	
+	CCDirector *director = [CCDirector sharedDirector];
+	
+	[director setDisplayFPS:YES];
+	
+	[director setOpenGLView:glView_];
+	
+	//	[director setProjection:kCCDirectorProjection2D];
+	
+	// Enable "moving" mouse event. Default no.
+	[window_ setAcceptsMouseMovedEvents:NO];
+	
+	
+	CCScene *scene = [CCScene node];
+	
+	CCMultiplexLayer *layer = [CCMultiplexLayer layerWithLayers: [Layer1 node], [Layer2 node], [Layer3 node], [Layer4 node], nil];
+	[scene addChild: layer z:0];
+	
+	[director runWithScene:scene];
+}
 
 @end
+#endif

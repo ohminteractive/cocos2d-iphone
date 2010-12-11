@@ -28,10 +28,11 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 		category is cocosLive is UTF8'ized
 		added sanity in scheduler
 		TileMapAtlas supports fullpath
+	* Andreas Löw (thesk) (http://http://www.code-and-web.de/)
+		Added support for the PVZ file format
+		FileUtils doesn't convert full paths
 	* Andy Fitter:
 		patches for Texture2D
-	* Andreas Löw (thesk):
-		FileUtils doesn't convert full paths
 	* Anton Zemlyanov:
 		patches for MenuItemToggle that supports selectedIndex
 	* arya.irani:
@@ -43,6 +44,8 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 	* Barney Mattox:
 		templates use rfc1034identifier patch.
 		XCode doxygen script runs with spaces in subdirectories.	
+	* Booyah (http://booyah.com/):
+		Added support for GL sharegroup in EAGLView
 	* Brian Hammond:
 		patches for Demos
 	* Bryan/Acceleroto (http://www.acceleroto.com):
@@ -55,10 +58,13 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 		Added Ease Elastic actions
 		oapcity + color works with premultiplied textures. patch.
 		Director: fixed startup flicker
+		Fixed the artifact in textures atlas with no border.
 	* cjlesh:
 		RotateTo action rotates to shortest angle patch
 	* Clinth Harris:
 		patches for Doc generator script
+	* cmkilger:
+		TMX maps: supports loading images from a different path than the map. patch.
 	* Codemattic:
 		patches for CocosNode
 		patches for MenuItemFont
@@ -113,6 +119,8 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 		patches for MultiplexLayer
 	* geefmijgratismail:
 		EAGLView supports resizing. patch.
+	* Gildas (http://www.bigpapoo.com)
+		Fixed memory leak when loading ParticleDesigner particles.
 	* Graham Perks:
 		Atlas works with GL_CULL_FACE
 		FastDirector doesn't leak autorelease pool patch
@@ -149,17 +157,24 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 		BitmapFontAtlas supports sub-directories patch
 	* Joe Vennix:
 		patches for CocosNode
-	* Jon Kean:
+	* Jon Kean (http://twitter.com/awesomestsoft):
 		PointParticle asserts if size > 64
 		Fixed memory leaks when initialization of some nodes failed
 		Added removeFromParent method in CCNode
 		Improved performance in CCArray
+		Simplified CCArray getNSArray code
+		Particles: Uses Quad in ARMv7 and Point in ARMv6. patch.
+		Particles Quad: code easier to read and optimize
+		Several patches that uses unsigned ints instead of signed ints
 	* Jose Miguel Gomez Gonzalez (http://www.itlgames.com)
 		Author of the games tab in the cocos2d site
 	* jkrippy:
 		patch for menu align. takes scale into account
 	* johnnyflash71:
 		TMX suports 1 tileset per layer patch
+		mkatlas.pl supports spaces in the name
+	* Jordan Schidlowsky:
+		Added "relative" mode to particles
 	* jszatmary:
 		QuadParticleSystem works with NPOT textures. patch.
 		QuadParticleSystem works with subrects. patch.
@@ -169,11 +184,16 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 		RotateTo uses min distance patch
 	* kasatani:
 		AtlasSprite index 0 is not overwritten
+	* keisuke.hata:
+		TouchTest works in RetinaDisplay
+		Node: convertToNodeSpace works on RetinaDisplay
 	* kermidt.zed:
 		patches for absolutePosition in CocosNode
 		patches for Labels in Texture2D
 	* Keith Peters:
 		author of Bezier drawing primitives
+	* Kristoffer Grönlund
+		Added multiline support in CCBitmapFontAtlas
 	* Lam Pham (http://www.fancyratstudios.com/)
 		Author of CCProgressTimer node
 		Author of CCProgressTo and CCProgressFromTo actions
@@ -209,10 +229,10 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 		Author of FontTest
 		PointParticleSystem doesn't draw if there are no particles patch
 		Actions: cleaner way to start/stop actions patches
-		author of CCPropertyAction
+		author of CCPropertyAction 
 	* magicyu (crmagicxxx):
 		CocosLive client supports ranking request patch
-	* manucorporat (manu.valladolid) (http://manucorporat.blogspot.com/):
+	* manucorporat (manu.valladolid) (http://www.abstractionworks.com/):
 		added isPaused property to Director
 		patches for the setColor API for the RGBA protocol
 		MenuItemLabel: color is saved when item is disabled
@@ -228,12 +248,27 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 		Added CCArray in CCNode and CCSpriteSheet to improve performance
 		ccCArray: added missing functions so that it easier to wrap a fast enum object around it.
 		Improved performance in serveral places by using CCARRAY_FOREACH
+		Particles: also work with vertex array list (compile time option). patch.
+		Mac Port: Ported CCLabelTTF to Mac
+		MenuItems are disabled at exit time (patch)
+		Fixed possible crash with NPOT PVR images
+		Optimized the loading time of PVR images
+		CCArray: improved performance in insert & delete elements
+	* marcofucci:
+		CCArray.fastRemoveObjectAtIndex patch.
+	* Marco Tillemans:
+		RenderTexture renders images with correct blend function. patch.
+		RenderTexture: performance fixes. Improved logic.
+		Added multisampling anti-aliasing support in EAGLView, ESRenderer
 	* marcu.catalin:
 		Menu items are not consumed is items are not visible
 	* Mark Cooke:
 		Added TintTo action
 	* mark at abitofthought:
 		author of the single threaded Fast Director
+	* Mark Sawicki:
+		Converted all transitions from: transitionName-Transition to Transition-trasitionName.
+		Converted TransitionTest to use the new naming convention
 	* master@hpi.cc:
 		updated patch for TMX per-tile properties.
 		Added Test for TMX per-tile properties
@@ -249,6 +284,7 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 	* Michal Szymerski:
 		Added support for AtlasSprite as MenuItems
 		author of CCFollow action
+		Added a way to remove from the SpriteFrameCache frames given a dictionary, file or texture
 	* Michael Thornton:
 		TMXTileMap supports any kind of child. patch.
 	* mike AT finklyinteractive:
@@ -268,12 +304,15 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 	* Neophit:
 		Added support for object and objectgroup in TMXTiledMaps
 		TMXTiledMaps: objects supports offsets. patch.
+		TMXLayer: checks correct GID in tilemaps. patch.
 	* Nerezus:
 		Fixed compile error when keyboard registry is enabled
 	* NovaOblivion:
 		Author of bug #915 test case
 	* palter AT clozure.com
 		Texture fails gracefully if PVR image can't be loaded (patch)
+	* Patrick Wolowicz:
+		mkatlas: added artifact removal by copying borders to margins
 	* Piero Tofy (http://indieappsalliance.org):
 		Author of the scraper script used to parse games data in the cocos2d site
 	* psionic81:
@@ -287,8 +326,10 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 	* Ray Wenderlich (http://www.raywenderlich.com/)
 		co-author of sample "CocosDenshion - Tom the Turret"
 	* Robert J Payne (http://www.zwopple.com/)
-		Author of Zwoptex editor, support
+		Author of Zwoptex editor. Added support for Zwoptex
 		Added support for left,right,top,bottom trim in CCSpriteFrameCache (patch).
+		Added support for Zwoptex rotated frames. patch
+		Author of Zwoptex Test
 	* Rolandas Razma (gamebit):
 		added support for auto-remove-on-finish in particles
 		TMX maps support visibility and opacity patch
@@ -301,6 +342,7 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 		migrated all cocos2d code and all test to using the CC namespace
 	* sakamoto.kazuki:
 		2d projection works OK with HighRes. patch.
+		Performance improvement in CCNode#insertChild. patch.
 	* samkass:
 		install_template.sh suports custom directory. patch.
 		install-template can be installed in user directory. patch.
@@ -312,6 +354,10 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 	* sflory:
 		new way to added CGImageRef to TextureMgr
 		added unicode support in BitmapFontAtlas
+	* shaydn:
+		Fixed convertoWorld/Node AR methods
+	* shire8bit:
+		PageTurnTransition: fixed artifacts
 	* Sindesso Pty Ltd & David Durbin (http://www.sindesso.com/):
 		author of PageTurn3D action
 		author of PageTurn3DTransition
@@ -328,13 +374,15 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 	* Stanislav Skuratov (trump-card):
 		Author of ParticleView, the particle editor
 	* Steve Oldmeadow (http://www.smoco.com/):
-		Author and maintainer of CocosDenshion Sound Engine
-		patches for Texture2D
-		Integrated Box2d physics engine
-		Created Box2d + cocos2d demo example
+		Author and maintainer of CocosDenshion Sound Engine:
+			It includes patching, maintaing, porting it to Mac,
+			adding new features, adding documentation, etc.
 		co-author of sample "CocosDenshion - Tom the Turret"
 		Author of sample "CocosDenshion - Drum Pad"
 		Author of sample "CocosDenshion - Fade to Grey"
+		patches for Texture2D
+		Integrated Box2d physics engine
+		Created Box2d + cocos2d demo example
 	* Stuart Carnie (http://www.manomio.com/):
 		Sprite with nil textures supports opacity & color. patch.
 		Added file templates: CCNode, CCLayer, CCSprite
@@ -373,6 +421,8 @@ People/companies who were/are contributing code to cocos2d for iPhone (alphabeti
 		Author of the transformations caches. world2local, local2world runs faster.
 		fixes for Repeat action. It doesn't skip integer values
 		CocosNode#children is an explicit property
+	* Wayne Marsh:
+		AnimationCache: patch to support animation cache
 	* yarrington:
 		patches for Director
 

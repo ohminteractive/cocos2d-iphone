@@ -59,7 +59,7 @@ Class restartAction()
 
 	CGSize s = [[CCDirector sharedDirector] winSize];
 		
-	CCLabel* label = [CCLabel labelWithString:[self title] fontName:@"Arial" fontSize:32];
+	CCLabelTTF *label = [CCLabelTTF labelWithString:[self title] fontName:@"Arial" fontSize:32];
 	[self addChild: label z:1];
 	[label setPosition: ccp(s.width/2, s.height-50)];
 	
@@ -133,8 +133,8 @@ Class restartAction()
 	// change the transform anchor to 0,0 (optional)
 	tilemap.anchorPoint = ccp(0, 0);
 
-	// Aliased images
-//	[tilemap.texture setAliasTexParameters];
+	// Anti Aliased images
+	[tilemap.texture setAntiAliasTexParameters];
 	
 
 	// background layer: another image
@@ -194,7 +194,11 @@ Class restartAction()
 {
 	if( (self=[super init] )) {
 
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 		self.isTouchEnabled = YES;
+#elif defined(__MAC_OS_X_VERSION_MAX_ALLOWED)
+		self.isMouseEnabled = YES;
+#endif
 		
 		// Top Layer, a simple image
 		CCSprite *cocosImage = [CCSprite spriteWithFile:@"powered.png"];
@@ -211,8 +215,9 @@ Class restartAction()
 		// change the transform anchor to 0,0 (optional)
 		tilemap.anchorPoint = ccp(0, 0);
 		
-		// Aliased images
-//		[tilemap.texture setAliasTexParameters];
+		// Anti Aliased images
+		[tilemap.texture setAntiAliasTexParameters];
+
 		
 		
 		// background layer: another image
@@ -243,6 +248,7 @@ Class restartAction()
 	return self;
 }
 
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 -(void) registerWithTouchDispatcher
 {
 	[[CCTouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
@@ -276,6 +282,19 @@ Class restartAction()
 	[node setPosition: ccpAdd(currentPos, diff)];
 }
 
+#elif defined(__MAC_OS_X_VERSION_MAX_ALLOWED)
+
+-(BOOL) ccMouseDragged:(NSEvent *)event
+{
+	CCNode *node = [self getChildByTag:kTagNode];
+	CGPoint currentPos = [node position];
+	[node setPosition: ccpAdd(currentPos, CGPointMake( event.deltaX, -event.deltaY) )];
+	
+	return YES;
+}
+
+#endif
+
 
 -(NSString *) title
 {
@@ -285,6 +304,8 @@ Class restartAction()
 
 
 // CLASS IMPLEMENTATIONS
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+
 @implementation AppController
 
 - (void) applicationDidFinishLaunching:(UIApplication*)application
@@ -312,6 +333,10 @@ Class restartAction()
 	
 	// Turn on display FPS
 	[director setDisplayFPS:YES];
+	
+	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
 	
 	CCScene *scene = [CCScene node];
 	[scene addChild: [nextAction() node]];
@@ -341,9 +366,10 @@ Class restartAction()
 	[[CCDirector sharedDirector] startAnimation];
 }
 
+// application will be killed
 - (void)applicationWillTerminate:(UIApplication *)application
 {	
-	[[CCDirector sharedDirector] end];
+	CC_DIRECTOR_END();
 }
 
 // purge memory
@@ -364,3 +390,33 @@ Class restartAction()
 	[super dealloc];
 }
 @end
+
+#elif defined(__MAC_OS_X_VERSION_MAX_ALLOWED)
+
+@implementation cocos2dmacAppDelegate
+
+@synthesize window=window_, glView=glView_;
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	
+	
+	CCDirector *director = [CCDirector sharedDirector];
+	
+	[director setDisplayFPS:YES];
+	
+	[director setOpenGLView:glView_];
+	
+	//	[director setProjection:kCCDirectorProjection2D];
+	
+	// Enable "moving" mouse event. Default no.
+	[window_ setAcceptsMouseMovedEvents:NO];
+	
+	
+	CCScene *scene = [CCScene node];
+	[scene addChild: [nextAction() node]];
+	
+	[director runWithScene:scene];
+}
+
+@end
+#endif

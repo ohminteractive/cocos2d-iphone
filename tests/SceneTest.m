@@ -39,6 +39,18 @@
 	return self;
 }
 
+-(void) onEnter
+{
+	NSLog(@"Layer1#onEnter");
+	[super onEnter];
+}
+
+-(void) onEnterTransitionDidFinish
+{
+	NSLog(@"Layer1#onEnterTransitionDidFinish");
+	[super onEnterTransitionDidFinish];
+}
+
 -(void) cleanup
 {
 	NSLog(@"Layer1#cleanup");
@@ -58,15 +70,17 @@
 
 -(void) onPushScene: (id) sender
 {
-	CCScene * scene = [[CCScene node] addChild: [Layer2 node] z:0];
+	CCScene * scene = [CCScene node];
+	[scene addChild: [Layer2 node] z:0];
 	[[CCDirector sharedDirector] pushScene: scene];
 //	[[Director sharedDirector] replaceScene:scene];
 }
 
 -(void) onPushSceneTran: (id) sender
 {
-	CCScene * scene = [[CCScene node] addChild: [Layer2 node] z:0];
-	[[CCDirector sharedDirector] pushScene: [CCSlideInTTransition transitionWithDuration:1 scene:scene]];
+	CCScene * scene = [CCScene node];
+	[scene addChild: [Layer2 node] z:0];
+	[[CCDirector sharedDirector] pushScene: [CCTransitionSlideInT transitionWithDuration:1 scene:scene]];
 }
 
 
@@ -140,12 +154,15 @@
 
 -(void) onReplaceScene:(id) sender
 {
-	[[CCDirector sharedDirector] replaceScene: [ [CCScene node] addChild: [Layer3 node] z:0] ];
+	CCScene *scene = [CCScene node];
+	[scene addChild: [Layer3 node] z:0];
+	[[CCDirector sharedDirector] replaceScene: scene];
 }
 -(void) onReplaceSceneTran:(id) sender
 {
-	CCScene *s = [[CCScene node] addChild: [Layer3 node] z:0];
-	[[CCDirector sharedDirector] replaceScene: [CCFlipXTransition transitionWithDuration:2 scene:s]];
+	CCScene *s = [CCScene node];
+	[s addChild: [Layer3 node] z:0];
+	[[CCDirector sharedDirector] replaceScene: [CCTransitionFlipX transitionWithDuration:2 scene:s]];
 }
 @end
 
@@ -157,7 +174,7 @@
 {
 	if( (self=[super initWithColor: ccc4(0,0,255,255)]) ) {
 		self.isTouchEnabled = YES;
-		id label = [CCLabel labelWithString:@"Touch to popScene" fontName:@"Marker Felt" fontSize:32];
+		id label = [CCLabelTTF labelWithString:@"Touch to popScene" fontName:@"Marker Felt" fontSize:32];
 		[self addChild:label];
 		CGSize s = [[CCDirector sharedDirector] winSize];
 		[label setPosition:ccp(s.width/2, s.height/2)];
@@ -221,6 +238,10 @@
 	// Sets landscape mode
 	[director setDeviceOrientation:kCCDeviceOrientationLandscapeLeft];
 	
+	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
+	
 	// Turn on display FPS
 	[director setDisplayFPS:YES];
 	
@@ -259,9 +280,10 @@
 	[[CCDirector sharedDirector] startAnimation];
 }
 
+// application will be killed
 - (void)applicationWillTerminate:(UIApplication *)application
 {	
-	[[CCDirector sharedDirector] end];
+	CC_DIRECTOR_END();
 }
 
 // purge memory

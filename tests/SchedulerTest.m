@@ -61,13 +61,13 @@ Class restartTest()
 		
 		CGSize s = [[CCDirector sharedDirector] winSize];
 				
-		CCLabel* label = [CCLabel labelWithString:[self title] fontName:@"Arial" fontSize:32];
+		CCLabelTTF *label = [CCLabelTTF labelWithString:[self title] fontName:@"Arial" fontSize:32];
 		[self addChild: label];
 		[label setPosition: ccp(s.width/2, s.height-50)];
 		
 		NSString *subtitle = [self subtitle];
 		if( subtitle ) {
-			CCLabel* l = [CCLabel labelWithString:subtitle fontName:@"Thonburi" fontSize:16];
+			CCLabelTTF *l = [CCLabelTTF labelWithString:subtitle fontName:@"Thonburi" fontSize:16];
 			[self addChild:l z:1];
 			[l setPosition:ccp(s.width/2, s.height-80)];
 		}
@@ -572,7 +572,7 @@ Class restartTest()
 {
 	ticks++;
 
-	CCLOG(@"schedUpdate: %.2f", dt);
+	NSLog(@"schedUpdate: %.2f", dt);
 	if( ticks > 3 ) {
 		[self schedule:_cmd interval:++interval];
 		ticks = 0;
@@ -609,6 +609,10 @@ Class restartTest()
 	
 	// Sets landscape mode
 	[director setDeviceOrientation:kCCDeviceOrientationLandscapeLeft];
+	
+	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
 	
 	// Turn on display FPS
 	[director setDisplayFPS:YES];
@@ -647,9 +651,10 @@ Class restartTest()
 	[[CCDirector sharedDirector] startAnimation];
 }
 
+// application will be killed
 - (void)applicationWillTerminate:(UIApplication *)application
 {	
-	[[CCDirector sharedDirector] end];
+	CC_DIRECTOR_END();
 }
 
 // purge memory

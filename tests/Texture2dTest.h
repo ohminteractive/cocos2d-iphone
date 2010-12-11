@@ -1,11 +1,25 @@
 #import "cocos2d.h"
 
 //CLASS INTERFACE
-@interface AppController : NSObject <UIAccelerometerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIApplicationDelegate>
+#ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
+@interface AppController : NSObject <UIApplicationDelegate>
 {
-	UIWindow	*window;
+	UIWindow *window;
 }
 @end
+
+#elif defined(__MAC_OS_X_VERSION_MAX_ALLOWED)
+@interface cocos2dmacAppDelegate : NSObject <NSApplicationDelegate>
+{
+	NSWindow	*window_;
+	MacGLView	*glView_;
+}
+
+@property (assign) IBOutlet NSWindow	*window;
+@property (assign) IBOutlet MacGLView	*glView;
+
+@end
+#endif // Mac
 
 @interface TextureDemo : CCLayer
 {}
@@ -46,7 +60,67 @@
 {}
 @end
 
+@interface TexturePVR2BPP : TextureDemo
+{}
+@end
+
+@interface TexturePVR4BPP : TextureDemo
+{}
+@end
+
+@interface TexturePVRRGBA8888 : TextureDemo
+{}
+@end
+
+@interface TexturePVRBGRA8888 : TextureDemo
+{}
+@end
+
+@interface TexturePVRRGBA4444 : TextureDemo
+{}
+@end
+
+@interface TexturePVRRGBA4444GZ : TextureDemo
+{}
+@end
+
+@interface TexturePVRRGBA4444CCZ : TextureDemo
+{}
+@end
+
+@interface TexturePVRRGBA5551 : TextureDemo
+{}
+@end
+
+@interface TexturePVRRGB565 : TextureDemo
+{}
+@end
+
+@interface TexturePVRA8 : TextureDemo
+{}
+@end
+
+@interface TexturePVRI8 : TextureDemo
+{}
+@end
+
+@interface TexturePVRAI88 : TextureDemo
+{}
+@end
+
 @interface TexturePVRMipMap : TextureDemo
+{}
+@end
+
+@interface TexturePVRMipMap2 : TextureDemo
+{}
+@end
+
+@interface TexturePVRNonSquare : TextureDemo
+{}
+@end
+
+@interface TexturePVRNPOT : TextureDemo
 {}
 @end
 

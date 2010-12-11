@@ -57,7 +57,7 @@ Class restartAction()
 	if( (self = [super init]) ) {
 		
 		CGSize s = [[CCDirector sharedDirector] winSize];	
-		CCLabel* label = [CCLabel labelWithString:[self title] fontName:@"Arial" fontSize:32];
+		CCLabelTTF *label = [CCLabelTTF labelWithString:[self title] fontName:@"Arial" fontSize:32];
 		[self addChild:label z:0 tag:kTagLabel];
 		[label setPosition: ccp(s.width/2, s.height-50)];
 		
@@ -227,8 +227,9 @@ Class restartAction()
 	// Turn on display FPS
 	[director setDisplayFPS:YES];
 	
-	// Hi-Res mode
-//	[director setContentScaleFactor:2];
+	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
+	if( ! [director enableRetinaDisplay:YES] )
+		CCLOG(@"Retina Display Not supported");
 	
 	CCScene *scene = [CCScene node];
 	[scene addChild: [nextAction() node]];
@@ -258,9 +259,10 @@ Class restartAction()
 	[[CCDirector sharedDirector] startAnimation];
 }
 
+// application will be killed
 - (void)applicationWillTerminate:(UIApplication *)application
 {	
-	[[CCDirector sharedDirector] end];
+	CC_DIRECTOR_END();
 }
 
 // purge memory
